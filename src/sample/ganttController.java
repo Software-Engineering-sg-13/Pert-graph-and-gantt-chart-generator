@@ -23,7 +23,7 @@ public class ganttController implements Initializable {
                 Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
                 Main.globalstage.setTitle("Hello");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
-                Main.globalstage.show();
+               // Main.globalstage.show();
                 System.out.println("ok");
             }
             catch(Exception e){

@@ -20,7 +20,7 @@ public class Controller implements Initializable {
     static protected ObservableList<Activity> product = FXCollections.observableArrayList();
     static protected ArrayList<Activity> listActivity= new ArrayList<Activity>();
    static private ArrayList <String> tempPrecedence = new ArrayList<String>();
-   static private ArrayList <String> listNames = new ArrayList<String>();
+   static private ArrayList <String> listNames = new ArrayList<>();
     @FXML
     protected TableView <Activity> activityTable;
     @FXML
@@ -38,7 +38,7 @@ public class Controller implements Initializable {
     @FXML
     private TextField activityDuration;
     @FXML
-     private ComboBox <String> comboBoxprecedence;
+     private ComboBox <String> comboBoxprecedence = new ComboBox<>();
     @FXML
     private Button precedenceAdder;
     @FXML
@@ -49,7 +49,7 @@ public class Controller implements Initializable {
     private Button GenerateGantt;
     @FXML
     private Button deleteActivity;
-    @FXML
+   @FXML
     void handleActivityInput(ActionEvent event){
         if(event.getSource() == resetPrecedences){
             dynamicPrecedence.setText("");
@@ -109,7 +109,7 @@ public class Controller implements Initializable {
                Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
                 Main.globalstage.setTitle("Hello");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
-                Main.globalstage.show();
+                //Main.globalstage.show();
                 System.out.println("ok");
             }
             catch(Exception e){
@@ -122,7 +122,7 @@ public class Controller implements Initializable {
                /* Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
                 Main.globalstage.setTitle("Hello");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
-                Main.globalstage.show();*/
+                */
             }
             catch(Exception e){
                 System.out.println("cool");
@@ -134,7 +134,7 @@ public class Controller implements Initializable {
                 /*Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
                 Main.globalstage.setTitle("Hello");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
-                Main.globalstage.show();*/
+                */
             }
             catch(Exception e){
                 System.out.println("cool");
@@ -143,6 +143,26 @@ public class Controller implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        if(comboBoxprecedence.getSelectionModel().isEmpty()){
+            System.out.println("returning to scene1");
+            ObservableList<String> bent = FXCollections.observableArrayList();
+            bent.addAll(listNames);
+            comboBoxprecedence.setItems(bent);
+            if(comboBoxprecedence.getSelectionModel().isEmpty()){
+                System.out.println(listNames);
+                System.out.println("yesreturn");
+            }
+        }
+        try{
+            activityTable.getColumns().clear();
+            eventNameColumn.setCellValueFactory(new PropertyValueFactory<Activity,String>("activityName"));
+            eventDurationColumn.setCellValueFactory(new PropertyValueFactory<Activity,Integer>("activityDuration"));
+            eventDependenciesColumn.setCellValueFactory(new PropertyValueFactory<Activity,String>("dynamicString"));
+            activityTable.setItems(product);
+            activityTable.getColumns().addAll(eventNameColumn,eventDurationColumn,eventDependenciesColumn);
+        }
+        catch (Exception e){
+            System.out.println("yeah");
+        }
     }
 }
