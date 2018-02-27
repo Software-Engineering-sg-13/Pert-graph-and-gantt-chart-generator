@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -104,6 +105,13 @@ public class Controller implements Initializable {
     void handleSceneAction(ActionEvent event) {
         System.out.println("coolw");
         if(event.getSource()==GenerateGantt){
+            fillTable();
+            for(int i=0;i<listActivity.size();i++) {
+                System.out.println("Earliest Finishes: " + listActivity.get(i).earliestFinish);
+            }
+            for(int i=0;i<listActivity.size();i++) {
+                System.out.println("Latest Finishes: " + listActivity.get(i).latestFinish);
+            }
             try{
                 System.out.println("coodlw");
                Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
@@ -141,6 +149,108 @@ public class Controller implements Initializable {
             }
         }
     }
+
+    private void fillTable() {
+       for(int i=0;i<listActivity.size();i++) {
+           int max = 0;
+           String temp;
+           if(listActivity.get(i).dependencies.size()==0) {
+               listActivity.get(i).earliestFinish = listActivity.get(i).activityDuration;
+           }
+           else {
+               for(int j=0;j<listActivity.get(i).dependencies.size();j++) {
+                   temp = listActivity.get(i).dependencies.get(j);
+                   for(int k=0;k<listActivity.size();k++) {
+                       if(listActivity.get(k).activityName==temp) {
+                            if(max < listActivity.get(k).earliestFinish) {
+                                System.out.println("***"+max);
+                                max = listActivity.get(k).earliestFinish;
+                            }
+                           break;
+                       }
+                   }
+               }
+               listActivity.get(i).earliestFinish = max+listActivity.get(i).activityDuration;
+           }
+
+       }
+
+       ArrayList<Integer> visited = new ArrayList<>(Collections.nCopies(listActivity.size(), 0));
+       int max=0;
+       int maxIndex=0;
+        for(int i=0;i<listActivity.size();i++) {
+            if(max < listActivity.get(i).earliestFinish) {
+                max = listActivity.get(i).earliestFinish;
+                maxIndex = i;
+            }
+        }
+        System.out.println("max EF: " + listActivity.get(maxIndex).activityName + " "+ listActivity.get(maxIndex).earliestFinish);
+        listActivity.get(maxIndex).latestFinish = listActivity.get(maxIndex).earliestFinish;
+        visited.set(maxIndex, 1);
+        System.out.println("visited List:" + visited);
+        fillParentOf();
+        for(int z=0;z<listActivity.size();z++) {
+            System.out.println("parent list: "+listActivity.get(z).parentOf);
+        }
+       while(visited.get(0)==0) {
+            for(int i=0;i<listActivity.size();i++) {
+                int min;
+                if(visited.get(i)==0 && isTrue(i, visited)) {
+                    System.out.println("hello");
+                    min = findMin(i);
+                    listActivity.get(i).latestFinish = min;
+                    visited.set(i, 1);
+                }
+            }
+       }
+    }
+
+    private int findMin(int i) {
+       int min = Integer.MAX_VALUE;
+       for(int j=0;j<listActivity.get(i).parentOf.size();j++) {
+           String temp = listActivity.get(i).parentOf.get(j);
+           for(int k=0;k<listActivity.size();k++) {
+               if(listActivity.get(k).activityName == temp) {
+                   if(min > (listActivity.get(k).latestFinish-listActivity.get(k).activityDuration)) {
+                       min = (listActivity.get(k).latestFinish-listActivity.get(k).activityDuration);
+                   }
+               }
+           }
+       }
+       return  min;
+    }
+
+    private boolean isTrue(int i, ArrayList<Integer> visited) {
+       System.out.println(visited);
+       for(int j=0;j<listActivity.get(i).parentOf.size();j++) {
+           String temp = listActivity.get(i).parentOf.get(j);
+           for(int k=0;k<listActivity.size();k++) {
+               if(listActivity.get(k).activityName == temp) {
+                   if(visited.get(k)==0) return false;
+                   break;
+               }
+           }
+       }
+        return true;
+    }
+
+    private void fillParentOf() {
+       for(int i=0;i<listActivity.size();i++) {
+           for(int j=0;j<listActivity.get(i).dependencies.size();j++) {
+               String temp = listActivity.get(i).dependencies.get(j);
+               for(int k=0;k<listActivity.size();k++) {
+                   if(listActivity.get(k).activityName==temp) {
+                       listActivity.get(k).parentOf.add(listActivity.get(i).activityName);
+                       break;
+                   }
+               }
+           }
+       }
+       for(int i=0;i<listActivity.size();i++) {
+           System.out.println(listActivity.get(i).parentOf);
+       }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if(comboBoxprecedence.getSelectionModel().isEmpty()){
