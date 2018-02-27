@@ -12,6 +12,7 @@ public class Activity {
     protected int slack;
     protected String dynamicString;
     protected ArrayList <String> dependencies = new ArrayList<String>();
+    protected ArrayList <String> parentOf = new ArrayList<String>();
 
     public String getActivityName() {
         return activityName;
@@ -23,4 +24,5 @@ public class Activity {
     public String getDynamicString() {
         return dynamicString;
     }
+
 }
