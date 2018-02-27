@@ -112,6 +112,9 @@ public class Controller implements Initializable {
             for(int i=0;i<listActivity.size();i++) {
                 System.out.println("Latest Finishes: " + listActivity.get(i).latestFinish);
             }
+            for(int i=0;i<listActivity.size();i++) {
+                System.out.println("On critical path:" + i + " " + listActivity.get(i).critical_path);
+            }
             try{
                 System.out.println("coodlw");
                Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
@@ -203,6 +206,13 @@ public class Controller implements Initializable {
                 }
             }
        }
+       for(int i=0;i<listActivity.size();i++) {
+            listActivity.get(i).slack = listActivity.get(i).latestFinish-listActivity.get(i).earliestFinish;
+            if(listActivity.get(i).slack == 0) {
+                listActivity.get(i).critical_path=true;
+            }
+            else listActivity.get(i).critical_path=false;
+        }
     }
 
     private int findMin(int i) {
