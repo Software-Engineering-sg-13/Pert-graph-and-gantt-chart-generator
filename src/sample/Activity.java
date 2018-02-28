@@ -1,18 +1,19 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Activity {
-    protected String activityName;
-    protected int activityDuration;
-    protected int startTime;
-    protected boolean critical_path;
-    protected int earliestFinish;
-    protected int latestFinish;
-    protected int slack;
-    protected String dynamicString;
-    protected ArrayList <String> dependencies = new ArrayList<String>();
-    protected ArrayList <String> parentOf = new ArrayList<String>();
+public  class Activity {
+    public String activityName;
+    public int activityDuration;
+    public int startTime;
+    public boolean critical_path;
+    public int earliestFinish;
+    public int latestFinish;
+    public int slack;
+    public String dynamicString;
+    public ArrayList <String> dependencies = new ArrayList<String>();
+    public ArrayList <String> parentOf = new ArrayList<String>();
 
     public String getActivityName() {
         return activityName;
@@ -24,5 +25,10 @@ public class Activity {
     public String getDynamicString() {
         return dynamicString;
     }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
 
 }

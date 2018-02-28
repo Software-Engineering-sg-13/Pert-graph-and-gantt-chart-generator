@@ -1,5 +1,6 @@
 package sample;
 
+import application.Money;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,10 +20,10 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    static protected ObservableList<Activity> product = FXCollections.observableArrayList();
-    static protected ArrayList<Activity> listActivity= new ArrayList<Activity>();
-   static private ArrayList <String> tempPrecedence = new ArrayList<String>();
-   static private ArrayList <String> listNames = new ArrayList<>();
+    static public ObservableList<Activity> product = FXCollections.observableArrayList();
+    static public ArrayList<Activity> listActivity= new ArrayList<Activity>();
+   static public ArrayList <String> tempPrecedence = new ArrayList<String>();
+   static public ArrayList <String> listNames = new ArrayList<>();
     @FXML
     protected TableView <Activity> activityTable;
     @FXML
@@ -120,7 +122,7 @@ public class Controller implements Initializable {
                Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
                 Main.globalstage.setTitle("Hello");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
-                //Main.globalstage.show();
+                //Money.globalstage.show();
                 System.out.println("ok");
             }
             catch(Exception e){
@@ -130,9 +132,13 @@ public class Controller implements Initializable {
         else if(event.getSource()==GeneratePert){
             try{
                 System.out.println("coodlw");
+                Money biger = new Money();
+                Stage pertsatgetemp = new Stage();
+
+                biger.start(pertsatgetemp);
                /* Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
-                Main.globalstage.setTitle("Hello");
-                Main.globalstage.setScene(new Scene(root, 600, 400));
+                Money.globalstage.setTitle("Hello");
+                Money.globalstage.setScene(new Scene(root, 600, 400));
                 */
             }
             catch(Exception e){
@@ -140,16 +146,36 @@ public class Controller implements Initializable {
             }
         }
         else if(event.getSource()==deleteActivity){
-            try{
-                System.out.println("coodlw");
-                /*Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
-                Main.globalstage.setTitle("Hello");
-                Main.globalstage.setScene(new Scene(root, 600, 400));
-                */
+            Activity selectedItem = activityTable.getSelectionModel().getSelectedItem();
+            activityTable.getItems().remove(selectedItem);
+            for(int i=0;i<listActivity.size();i++) {
+                String temp = listActivity.get(i).activityName;
+                if(temp == selectedItem.activityName) {
+                    listNames.remove(temp);
+                    listActivity.remove(i);
+                    comboBoxprecedence.getItems().remove(temp);
+                    for (int j=0;j<listActivity.size();j++) {
+                        if(listActivity.get(j).dependencies.contains(temp)){
+                            listActivity.get(j).dependencies.remove(temp);
+                        }
+
+                    }
+                    for (int j=0;j<listActivity.size();j++) {
+                        listActivity.get(j).dynamicString = listActivity.get(j).dependencies.toString();
+
+                    }
+
+                    activityTable.getColumns().clear();
+                    eventNameColumn.setCellValueFactory(new PropertyValueFactory<Activity,String>("activityName"));
+                    eventDurationColumn.setCellValueFactory(new PropertyValueFactory<Activity,Integer>("activityDuration"));
+                    eventDependenciesColumn.setCellValueFactory(new PropertyValueFactory<Activity,String>("dynamicString"));
+                    activityTable.setItems(product);
+                    activityTable.getColumns().addAll(eventNameColumn,eventDurationColumn,eventDependenciesColumn);
+                }
             }
-            catch(Exception e){
-                System.out.println("cool");
-            }
+
+            product.clear();
+            product.addAll(listActivity);
         }
     }
 
@@ -159,6 +185,7 @@ public class Controller implements Initializable {
            String temp;
            if(listActivity.get(i).dependencies.size()==0) {
                listActivity.get(i).earliestFinish = listActivity.get(i).activityDuration;
+               listActivity.get(i).startTime = listActivity.get(i).earliestFinish-listActivity.get(i).activityDuration ;
            }
            else {
                for(int j=0;j<listActivity.get(i).dependencies.size();j++) {
@@ -174,6 +201,7 @@ public class Controller implements Initializable {
                    }
                }
                listActivity.get(i).earliestFinish = max+listActivity.get(i).activityDuration;
+               listActivity.get(i).startTime = listActivity.get(i).earliestFinish-listActivity.get(i).activityDuration;
            }
 
        }
@@ -195,6 +223,7 @@ public class Controller implements Initializable {
         for(int z=0;z<listActivity.size();z++) {
             System.out.println("parent list: "+listActivity.get(z).parentOf);
         }
+        int count=1;
        while(visited.get(0)==0) {
             for(int i=0;i<listActivity.size();i++) {
                 int min;
@@ -203,6 +232,7 @@ public class Controller implements Initializable {
                     min = findMin(i);
                     listActivity.get(i).latestFinish = min;
                     visited.set(i, 1);
+                    count++;
                 }
             }
        }
