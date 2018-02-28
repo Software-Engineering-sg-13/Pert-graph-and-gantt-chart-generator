@@ -11,7 +11,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         globalstage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Gantt Chart & Pert Graph Generator");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }

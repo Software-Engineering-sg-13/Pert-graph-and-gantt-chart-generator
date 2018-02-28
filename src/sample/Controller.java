@@ -120,7 +120,7 @@ public class Controller implements Initializable {
             try{
                 System.out.println("coodlw");
                Parent root = FXMLLoader.load(getClass().getResource("gantt.fxml"));
-                Main.globalstage.setTitle("Hello");
+                Main.globalstage.setTitle("Gantt Chart");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
                 //Money.globalstage.show();
                 System.out.println("ok");

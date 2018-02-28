@@ -38,7 +38,7 @@ public class ganttController implements Initializable {
         if(event.getSource()==home){
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-                Main.globalstage.setTitle("Hello");
+                Main.globalstage.setTitle("Gantt Chart & Pert Graph Generator");
                 Main.globalstage.setScene(new Scene(root, 600, 400));
                // Money.globalstage.show();
                 System.out.println("ok");

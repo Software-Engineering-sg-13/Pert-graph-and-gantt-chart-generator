@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ganttController">
    <children>
@@ -16,17 +15,9 @@
          <children>
             <HBox prefHeight="32.0" prefWidth="600.0">
                <children>
-                  <Button fx:id="generateChart" alignment="CENTER" contentDisplay="TOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" text="Gantt Chart">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="250.0" top="10.0" />
-                     </HBox.margin>
-                  </Button>
                   <Button fx:id="home" mnemonicParsing="false" onAction="#handle" text="Home">
                      <HBox.margin>
-                        <Insets bottom="5.0" left="120.0" top="10.0" />
+                        <Insets bottom="5.0" left="500.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>

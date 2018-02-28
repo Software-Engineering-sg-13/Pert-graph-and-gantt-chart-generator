@@ -151,6 +151,8 @@ public class Money {
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
         primaryStage.setScene(scene);
+
+        primaryStage.setTitle("Pert Graph");
         primaryStage.show();
 
         addGraphComponents();
